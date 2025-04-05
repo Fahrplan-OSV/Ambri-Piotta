@@ -69,15 +69,19 @@
 
   <script>
     (function() {
-      const toAiroloHours = Array.from({length: 15}, (_, i) => 6 + i); // 06:19 bis 20:19
-      const toBellinzonaHours = Array.from({length: 16}, (_, i) => 6 + i); // 06:40 bis 21:40
+      const re1AiroloHours = Array.from({length: 15}, (_, i) => 6 + i); // 06:19 - 20:19
+      const re1BellinzonaHours = Array.from({length: 16}, (_, i) => 6 + i); // 06:40 - 21:40
 
       function pad(n) {
         return n.toString().padStart(2, '0');
       }
 
       function formatTime(h, m, s) {
-        return s != null ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(h)}:${pad(m)}`;
+        if (!s && s !== 0) {
+          return `${pad(h)}:${pad(m)}`;
+        } else {
+          return `${pad(h)}:${pad(m)}:${pad(s)}`;
+        }
       }
 
       function extractDelayMinutes(notice) {
@@ -94,24 +98,24 @@
           const h = d.getHours();
           const m = d.getMinutes();
 
-          if (toAiroloHours.includes(h) && m === 19) {
-            departures.push({
-              time: formatTime(h, m),
-              hour: h,
-              minute: m,
-              line: 'RE11',
-              destination: 'Airolo',
-              notice: ''
-            });
-          }
-
-          if (toBellinzonaHours.includes(h) && m === 40) {
+          if (re1AiroloHours.includes(h) && m === 19) {
             departures.push({
               time: formatTime(h, m),
               hour: h,
               minute: m,
               line: 'RE1',
-              destination: 'Faido – Biasca – Bellinzona',
+              destination: 'Airolo',
+              notice: ''
+            });
+          }
+
+          if (re1BellinzonaHours.includes(h) && m === 40) {
+            departures.push({
+              time: formatTime(h, m),
+              hour: h,
+              minute: m,
+              line: 'RE1',
+              destination: 'Faido – Lavorgo – Biasca – Bellinzona',
               notice: ''
             });
           }
